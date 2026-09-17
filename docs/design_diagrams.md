@@ -1,6 +1,6 @@
-# System Design & UML Diagrams
+# VisionFlow-Traffic-Analytics — System Design & UML Diagrams
 
-This document contains the complete set of architectural and UML design diagrams required by **Section 4 & Section 6 of the VITyarthi Project Evaluation Guidelines**.
+This document contains the complete set of architectural and UML design diagrams for **VisionFlow-Traffic-Analytics** as required by **Section 4 & Section 6 of the VITyarthi Project Evaluation Guidelines**.
 
 ---
 

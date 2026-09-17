@@ -20,7 +20,7 @@ from routers import (
 os.makedirs("uploads", exist_ok=True)
 
 app = FastAPI(
-    title="Smart Traffic & Computer Vision Analytics API",
+    title="VisionFlow-Traffic-Analytics: Smart Traffic & Computer Vision Analytics API",
     description=(
         "Production-grade REST API for digital image processing, feature extraction, "
         "semantic segmentation, YOLOv8 object detection, ByteTrack tracking, and optical flow."

@@ -1,7 +1,7 @@
 # Problem Statement & Academic Alignment Specification
 
 ## Course: CSE3010 Computer Vision (LP 3 Credits)
-**Project Title**: Smart Traffic & Computer Vision Video Analytics Platform  
+**Project Title**: VisionFlow-Traffic-Analytics: Smart Traffic & Computer Vision Video Analytics Platform  
 **Evaluation Program**: VITyarthi - Build Your Own Project
 
 ---

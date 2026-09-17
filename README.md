@@ -1,4 +1,4 @@
-# VisionFlow — Smart Traffic & Computer Vision Video Analytics Platform
+# VisionFlow-Traffic-Analytics — Smart Traffic & Computer Vision Video Analytics Platform
 **CSE3010 Computer Vision | Full-Stack Academic Project**
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
@@ -12,7 +12,7 @@
 
 ## 1. Project Overview
 
-**VisionFlow** is an interactive, browser-based Computer Vision and Traffic Video Analytics platform developed for academic coursework in **CSE3010 Computer Vision** (VITyarthi Project Framework).
+**VisionFlow-Traffic-Analytics** is an interactive, browser-based Computer Vision and Traffic Video Analytics platform developed for academic coursework in **CSE3010 Computer Vision** (VITyarthi Project Framework).
 
 The platform bridges foundational mathematical formulations with empirical computer vision experimentation. It features a dark glassmorphism Single Page Application (SPA) backed by a high-throughput **FastAPI backend** running 30+ algorithms implemented in **OpenCV 4.10, NumPy, scikit-image, and Ultralytics YOLOv8**.
 

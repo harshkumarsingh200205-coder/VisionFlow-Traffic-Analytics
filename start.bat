@@ -1,6 +1,6 @@
 @echo off
 echo ===============================================================================
-echo Starting Smart Traffic Video Analytics Platform (VisionFlow)
+echo Starting VisionFlow-Traffic-Analytics Platform
 echo ===============================================================================
 
 :: Activate virtual environment if available

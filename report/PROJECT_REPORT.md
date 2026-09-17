@@ -1,5 +1,5 @@
 # Academic Project Evaluation Report
-# VisionFlow: Smart Traffic & Computer Vision Video Analytics Platform
+# VisionFlow-Traffic-Analytics: Smart Traffic & Computer Vision Video Analytics Platform
 **A Full-Stack Educational & Applied Computer Vision Laboratory**
 
 - **Course Code**: CSE3010 | **Course Title**: Computer Vision

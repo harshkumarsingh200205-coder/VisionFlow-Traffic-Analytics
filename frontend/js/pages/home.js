@@ -12,7 +12,7 @@ const HomePage = {
             <div style="max-width: 750px;">
               <div class="badge badge-cyan" style="margin-bottom: 12px;">CSE3010 Computer Vision Course Platform</div>
               <h1 style="font-size: 2.4rem; margin-bottom: 14px; line-height: 1.2;">
-                Smart Traffic & Computer Vision <span style="color: var(--accent-cyan);">Video Analytics</span>
+                VisionFlow-Traffic-Analytics <span style="color: var(--accent-cyan);">Platform</span>
               </h1>
               <p style="font-size: 1.05rem;">
                 A unified, high-throughput platform demonstrating classical digital image processing, feature extraction, 
