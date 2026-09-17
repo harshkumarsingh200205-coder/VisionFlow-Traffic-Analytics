@@ -1,0 +1,86 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=cyan,
+    citecolor=green
+}
+
+\title{\textbf{VisionFlow: Smart Traffic \& Computer Vision Video Analytics Platform}\\
+\large CSE3010 Computer Vision | VITyarthi Build Your Own Project}
+\author{\textbf{Course Project Report}}
+\date{Academic Year 2025--2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+Computer Vision forms the cornerstone of modern Intelligent Transportation Systems (ITS), automated surveillance, and robotic perception. This project presents \textbf{VisionFlow}, an interactive, full-stack analytical platform that unifies classical digital image processing techniques with state-of-the-art deep convolutional networks and multi-object association tracking.
+
+\section{Problem Statement}
+In computer vision education and research, students and engineers frequently struggle to correlate theoretical mathematical equations with empirical visual outcomes. VisionFlow bridges this gap through real-time hyperparameter sweeping, synchronized comparative split views, and rich telemetry dashboards.
+
+\section{Functional Requirements}
+\begin{itemize}
+    \item \textbf{FR-1}: Image Preprocessing \& Filters (Gaussian, Median, Laplacian, CLAHE, Morphology).
+    \item \textbf{FR-2}: Feature \& Edge Extraction (Canny, Sobel, LoG, Hough Lines, Harris, SIFT, HOG).
+    \item \textbf{FR-3}: Image Segmentation (K-Means, Mean Shift, Seeded Region Growing, Contours).
+    \item \textbf{FR-4}: Deep Learning Object Detection (YOLOv8n COCO 80 classes with tunable confidence \& NMS).
+    \item \textbf{FR-5}: Video Telemetry \& Uniform Keyframe Sampling.
+    \item \textbf{FR-6}: Multi-Object Tracking (YOLOv8 + ByteTrack persistent track IDs).
+    \item \textbf{FR-7}: Motion Analysis (Dense Farneb\"ack optical flow, Sparse Lucas-Kanade, MOG2/KNN Background Subtraction).
+\end{itemize}
+
+\section{Non-Functional Requirements}
+\begin{itemize}
+    \item \textbf{NFR-1 (Performance)}: Response latency $< 150$\,ms for spatial filters; video decimation enables multi-frame tracking in $< 3.5$\,s.
+    \item \textbf{NFR-2 (Usability)}: Dark Glassmorphism SPA with debounced sliders and responsive sidebar.
+    \item \textbf{NFR-3 (Reliability)}: In-memory stream processing with guaranteed temporary file cleanup.
+    \item \textbf{NFR-4 (Modularity)}: 5-layer decoupled architecture with independent FastAPI routers.
+\end{itemize}
+
+\section{System Architecture \& Design Decisions}
+VisionFlow employs a 5-layer decoupled architecture:
+\begin{enumerate}
+    \item \textbf{Client Presentation Layer}: Vanilla ES6 Single Page Application with Chart.js 4.4 widgets.
+    \item \textbf{API Gateway Layer}: Asynchronous FastAPI ASGI router with CORS and OpenAPI docs.
+    \item \textbf{Service Layer}: \texttt{cv\_utils} Base64 codecs and \texttt{yolo\_service} ByteTrack tracker.
+    \item \textbf{Vision Engine}: OpenCV 4.10 C++ native routines and PyTorch YOLOv8 neural network.
+    \item \textbf{Data Layer}: In-memory buffers and auto-cleaned temporary upload storage.
+\end{enumerate}
+
+\section{Testing \& Validation}
+Automated testing is implemented using \texttt{pytest}:
+\begin{itemize}
+    \item \texttt{tests/test\_image\_modules.py}: 5 tests covering all Mode A endpoints.
+    \item \texttt{tests/test\_video\_modules.py}: 3 tests covering Mode B video metadata, tracking, and motion analysis.
+    \item \textbf{Result}: 100\% test pass rate (8/8 tests passed).
+\end{itemize}
+
+\section{Challenges \& Key Learnings}
+\begin{itemize}
+    \item \textbf{Video Stream Decimation}: Solved high computational latency on surveillance video by implementing uniform frame decimation (\texttt{frame\_step}).
+    \item \textbf{Memory Safety}: Prevented upload file accumulation using strict \texttt{try...finally} cleanup.
+    \item \textbf{Stateful Tracking}: Managed persistent ByteTrack state and Kalman filter re-identification across occluded vehicle paths.
+\end{itemize}
+
+\section{References}
+\begin{enumerate}
+    \item Szeliski, R. (2011). \textit{Computer Vision: Algorithms and Applications}. Springer.
+    \item Gonzalez, R. C., \& Woods, R. E. (2018). \textit{Digital Image Processing}. Pearson.
+    \item Zhang, Y., et al. (2022). \textit{ByteTrack: Multi-Object Tracking by Associating Every Detection Box}. ECCV.
+\end{enumerate}
+
+\end{document}
