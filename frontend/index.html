@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Traffic & CV Analytics Platform</title>
+  <meta name="description" content="Intelligent Computer Vision & Traffic Analytics Platform. Features spatial filters, edge analysis, image segmentation, YOLOv8 object detection, ByteTrack tracking, and optical flow." />
+  <meta name="keywords" content="computer vision, traffic analytics, YOLOv8, ByteTrack, optical flow, image processing, segmentation, edge detection" />
+  <meta name="author" content="CSE3010 Computer Vision" />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js 4.4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Design System Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Global Loading & Processing Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <div class="loading-title" id="loading-title">Processing Pipeline…</div>
+      <div class="loading-sub" id="loading-sub">Executing Computer Vision algorithms</div>
+      <div class="loading-bar-track">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">⚡</div>
+      <div class="sidebar-titles">
+        <div class="sidebar-app-name">VisionFlow</div>
+        <div class="sidebar-sub">Traffic & CV Lab</div>
+      </div>
+    </div>
+
+    <div class="nav-section-title">CORE MODES</div>
+    <a href="#home" class="nav-item active" id="nav-home" onclick="navigate('home')">
+      <span class="nav-icon">🏠</span><span>Home & Overview</span>
+    </a>
+    <a href="#image" class="nav-item" id="nav-image" onclick="navigate('image')">
+      <span class="nav-icon">🖼️</span><span>Image Analysis</span>
+    </a>
+    <a href="#video" class="nav-item" id="nav-video" onclick="navigate('video')">
+      <span class="nav-icon">🎬</span><span>Video Analytics</span>
+    </a>
+
+    <div class="sidebar-divider"></div>
+    <div class="nav-section-title">IMAGE MODULES</div>
+    <button class="nav-sub-btn" onclick="navigate('image','preprocessing')">
+      <span class="nav-icon">🔧</span><span>1. Preprocessing</span>
+    </button>
+    <button class="nav-sub-btn" onclick="navigate('image','features')">
+      <span class="nav-icon">🔍</span><span>2. Feature & Edges</span>
+    </button>
+    <button class="nav-sub-btn" onclick="navigate('image','segmentation')">
+      <span class="nav-icon">🎭</span><span>3. Segmentation</span>
+    </button>
+    <button class="nav-sub-btn" onclick="navigate('image','detection')">
+      <span class="nav-icon">🎯</span><span>4. YOLOv8 Detection</span>
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="nav-section-title">VIDEO MODULES</div>
+    <button class="nav-sub-btn" onclick="navigate('video','info')">
+      <span class="nav-icon">ℹ️</span><span>5. Video Telemetry</span>
+    </button>
+    <button class="nav-sub-btn" onclick="navigate('video','tracking')">
+      <span class="nav-icon">📡</span><span>6. Multi-Object Track</span>
+    </button>
+    <button class="nav-sub-btn" onclick="navigate('video','motion')">
+      <span class="nav-icon">〰️</span><span>7. Motion & Flow</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="footer-badge">CSE3010 | LP 3 Credits</div>
+      <div class="footer-version">VisionFlow v1.0.0</div>
+    </div>
+  </aside>
+
+  <!-- Mobile Sidebar Toggle -->
+  <button class="mobile-toggle" id="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation menu">☰</button>
+
+  <!-- Main Content Workspace -->
+  <main class="main-content" id="main-content">
+    <div id="app">
+      <!-- Dynamic Page Views Rendered Here -->
+    </div>
+  </main>
+
+  <!-- Script Modules -->
+  <script src="js/api.js"></script>
+  <script src="js/components/progressOverlay.js"></script>
+  <script src="js/components/dashboard.js"></script>
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/image_mode.js"></script>
+  <script src="js/pages/video_mode.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
