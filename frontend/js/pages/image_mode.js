@@ -32,10 +32,10 @@ const ImageModePage = {
 
         <!-- Tab Bar -->
         <div class="tab-bar">
-          <button class="tab-btn ${this._activeTab === 'preprocessing' ? 'active' : ''}" onclick="ImageModePage.switchTab('preprocessing')">1. Preprocessing & Filters</button>
-          <button class="tab-btn ${this._activeTab === 'features' ? 'active' : ''}" onclick="ImageModePage.switchTab('features')">2. Feature & Edge Analysis</button>
-          <button class="tab-btn ${this._activeTab === 'segmentation' ? 'active' : ''}" onclick="ImageModePage.switchTab('segmentation')">3. Image Segmentation</button>
-          <button class="tab-btn ${this._activeTab === 'detection' ? 'active' : ''}" onclick="ImageModePage.switchTab('detection')">4. YOLOv8 Detection</button>
+          <button class="tab-btn ${this._activeTab === 'preprocessing' ? 'active' : ''}" onclick="ImageModePage.switchTab('preprocessing')">Preprocessing & Filters</button>
+          <button class="tab-btn ${this._activeTab === 'features' ? 'active' : ''}" onclick="ImageModePage.switchTab('features')">Feature & Edge Analysis</button>
+          <button class="tab-btn ${this._activeTab === 'segmentation' ? 'active' : ''}" onclick="ImageModePage.switchTab('segmentation')">Image Segmentation</button>
+          <button class="tab-btn ${this._activeTab === 'detection' ? 'active' : ''}" onclick="ImageModePage.switchTab('detection')">YOLOv8 Detection</button>
         </div>
 
         <!-- Parameter Controls Panel -->

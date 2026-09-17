@@ -26,9 +26,9 @@ const VideoModePage = {
 
         <!-- Tab Bar -->
         <div class="tab-bar">
-          <button class="tab-btn ${this._activeTab === 'info' ? 'active' : ''}" onclick="VideoModePage.switchTab('info')">5. Video Telemetry & Keyframes</button>
-          <button class="tab-btn ${this._activeTab === 'tracking' ? 'active' : ''}" onclick="VideoModePage.switchTab('tracking')">6. YOLOv8 + ByteTrack Tracking</button>
-          <button class="tab-btn ${this._activeTab === 'motion' ? 'active' : ''}" onclick="VideoModePage.switchTab('motion')">7. Motion & Flow Analysis</button>
+          <button class="tab-btn ${this._activeTab === 'info' ? 'active' : ''}" onclick="VideoModePage.switchTab('info')">Video Telemetry & Keyframes</button>
+          <button class="tab-btn ${this._activeTab === 'tracking' ? 'active' : ''}" onclick="VideoModePage.switchTab('tracking')">YOLOv8 + ByteTrack Tracking</button>
+          <button class="tab-btn ${this._activeTab === 'motion' ? 'active' : ''}" onclick="VideoModePage.switchTab('motion')">Motion & Flow Analysis</button>
         </div>
 
         <!-- Parameter Controls Panel -->

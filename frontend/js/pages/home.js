@@ -47,58 +47,58 @@ const HomePage = {
         <div>
           <h2 style="font-size: 1.4rem; margin-bottom: 16px;">Comprehensive Algorithmic Modules</h2>
           <div class="grid-3">
-            <!-- Module 1 -->
+            <!-- Preprocessing -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('image','preprocessing')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">🔧</div>
-              <div class="badge badge-cyan" style="margin-bottom: 8px;">Module 1</div>
+              <div class="badge badge-cyan" style="margin-bottom: 8px;">Filtering & Enhancement</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Image Preprocessing</h3>
               <p style="font-size: 0.85rem;">Spatial Gaussian/Median filters, Laplacian sharpening, CLAHE, and Mathematical Morphology.</p>
             </div>
 
-            <!-- Module 2 -->
+            <!-- Features -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('image','features')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">🔍</div>
-              <div class="badge badge-cyan" style="margin-bottom: 8px;">Module 2</div>
+              <div class="badge badge-cyan" style="margin-bottom: 8px;">Gradients & Keypoints</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Feature & Edge Analysis</h3>
               <p style="font-size: 0.85rem;">Canny edge detector, Sobel, Laplacian of Gaussian, Hough lines, Harris corners, SIFT, and HOG.</p>
             </div>
 
-            <!-- Module 3 -->
+            <!-- Segmentation -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('image','segmentation')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">🎭</div>
-              <div class="badge badge-cyan" style="margin-bottom: 8px;">Module 3</div>
+              <div class="badge badge-cyan" style="margin-bottom: 8px;">Clustering & Regions</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Image Segmentation</h3>
               <p style="font-size: 0.85rem;">Unsupervised K-Means clustering, Mean Shift filtering, Seeded Region Growing, and Contours.</p>
             </div>
 
-            <!-- Module 4 -->
+            <!-- Detection -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('image','detection')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">🎯</div>
-              <div class="badge badge-emerald" style="margin-bottom: 8px;">Module 4</div>
+              <div class="badge badge-emerald" style="margin-bottom: 8px;">Neural Inference</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">YOLOv8 Object Detection</h3>
               <p style="font-size: 0.85rem;">Single-shot deep neural network inference across 80 COCO classes with tunable confidence & NMS.</p>
             </div>
 
-            <!-- Module 5 -->
+            <!-- Video Telemetry -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('video','info')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">ℹ️</div>
-              <div class="badge badge-amber" style="margin-bottom: 8px;">Module 5</div>
+              <div class="badge badge-amber" style="margin-bottom: 8px;">Stream Sampling</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Video Telemetry</h3>
               <p style="font-size: 0.85rem;">Container stream decoding (FPS, Resolution, Bitrate) and uniform temporal keyframe sample strips.</p>
             </div>
 
-            <!-- Module 6 -->
+            <!-- Tracking -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('video','tracking')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">📡</div>
-              <div class="badge badge-amber" style="margin-bottom: 8px;">Module 6</div>
+              <div class="badge badge-amber" style="margin-bottom: 8px;">ByteTrack Tracking</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Multi-Object Tracking</h3>
               <p style="font-size: 0.85rem;">YOLOv8 + ByteTrack persistent track IDs with Kalman spatial prediction and category breakdown.</p>
             </div>
 
-            <!-- Module 7 -->
+            <!-- Motion -->
             <div class="glass-card" style="cursor: pointer;" onclick="navigate('video','motion')">
               <div style="font-size: 1.8rem; margin-bottom: 10px;">〰️</div>
-              <div class="badge badge-amber" style="margin-bottom: 8px;">Module 7</div>
+              <div class="badge badge-amber" style="margin-bottom: 8px;">Optical Flow</div>
               <h3 style="font-size: 1.1rem; margin-bottom: 6px;">Motion & Flow Analysis</h3>
               <p style="font-size: 0.85rem;">Dense Farnebäck optical flow (8-bin polar vectors), Lucas-Kanade trails, and MOG2/KNN background subtraction.</p>
             </div>
