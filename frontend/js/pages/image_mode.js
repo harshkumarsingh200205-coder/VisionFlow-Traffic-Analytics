@@ -3,7 +3,10 @@
  */
 const ImageModePage = {
   _currentFile: null,
+  _currentDataUrl: null,
   _activeTab: "preprocessing",
+  _debounceTimer: null,
+  _isProcessing: false,
 
   render(subModule = "preprocessing") {
     this._activeTab = subModule;
@@ -16,9 +19,12 @@ const ImageModePage = {
             <div class="badge badge-cyan" style="margin-bottom: 6px;">Mode A Workspace</div>
             <h1 style="font-size: 1.8rem;">Static Image Processing Lab</h1>
           </div>
-          <div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn-secondary" onclick="ImageModePage.loadSampleImage()">
+              <span>⚡ Load Sample Traffic Image</span>
+            </button>
             <label class="btn-primary" style="cursor: pointer;">
-              <span>📁 Upload Image</span>
+              <span>📁 Upload Custom Image</span>
               <input type="file" id="img-upload-input" accept="image/*" style="display: none;" onchange="ImageModePage.onFileSelected(event)" />
             </label>
           </div>
@@ -43,11 +49,11 @@ const ImageModePage = {
           <div class="image-pane">
             <div class="pane-header">
               <span>Original Source Image</span>
-              <span id="orig-dim-badge" class="badge badge-cyan">No Image</span>
+              <span id="orig-dim-badge" class="badge badge-cyan">${this._currentFile ? 'Loaded' : 'No Image'}</span>
             </div>
             <div class="pane-body">
-              <img id="img-original" src="" alt="Upload an image" style="display: none;" />
-              <div id="orig-placeholder" style="color: var(--text-muted); font-size: 0.9rem;">Please upload an image to begin</div>
+              <img id="img-original" src="${this._currentDataUrl || ''}" alt="Original" style="${this._currentDataUrl ? 'display: block;' : 'display: none;'}" />
+              <div id="orig-placeholder" style="${this._currentDataUrl ? 'display: none;' : 'color: var(--text-muted); font-size: 0.9rem;'}">Please upload an image or click 'Load Sample Traffic Image'</div>
             </div>
           </div>
 
@@ -78,6 +84,10 @@ const ImageModePage = {
         </div>
       </div>
     `;
+
+    if (this._currentFile) {
+      this.debouncedExecute();
+    }
   },
 
   switchTab(tab) {
@@ -88,7 +98,7 @@ const ImageModePage = {
       ctrlPanel.innerHTML = this.renderControlsForTab(tab);
     }
     if (this._currentFile) {
-      this.executeCurrentOperation();
+      this.debouncedExecute();
     }
   },
 
@@ -98,7 +108,7 @@ const ImageModePage = {
         <div class="controls-panel" style="margin-top: 0;">
           <div class="control-group">
             <label class="control-label">Algorithm Operation</label>
-            <select id="prep-op" onchange="ImageModePage.executeCurrentOperation()">
+            <select id="prep-op" onchange="ImageModePage.debouncedExecute()">
               <option value="original">Original (Pass-through)</option>
               <option value="grayscale">Grayscale Conversion</option>
               <option value="gaussian_blur" selected>Gaussian Smoothing Filter</option>
@@ -113,19 +123,19 @@ const ImageModePage = {
           </div>
           <div class="control-group">
             <label class="control-label">Kernel Dimension <span id="ksize-val" class="control-value">5</span></label>
-            <input type="range" id="prep-ksize" min="3" max="31" step="2" value="5" oninput="document.getElementById('ksize-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="prep-ksize" min="3" max="31" step="2" value="5" oninput="document.getElementById('ksize-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Gaussian Sigma (σ) <span id="sigma-val" class="control-value">1.5</span></label>
-            <input type="range" id="prep-sigma" min="0.5" max="10.0" step="0.5" value="1.5" oninput="document.getElementById('sigma-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="prep-sigma" min="0.5" max="10.0" step="0.5" value="1.5" oninput="document.getElementById('sigma-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Contrast Multiplier (α) <span id="alpha-val" class="control-value">1.0</span></label>
-            <input type="range" id="prep-alpha" min="0.2" max="3.0" step="0.1" value="1.0" oninput="document.getElementById('alpha-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="prep-alpha" min="0.2" max="3.0" step="0.1" value="1.0" oninput="document.getElementById('alpha-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Brightness Shift (β) <span id="beta-val" class="control-value">0</span></label>
-            <input type="range" id="prep-beta" min="-100" max="100" step="5" value="0" oninput="document.getElementById('beta-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="prep-beta" min="-100" max="100" step="5" value="0" oninput="document.getElementById('beta-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
         </div>
       `;
@@ -134,7 +144,7 @@ const ImageModePage = {
         <div class="controls-panel" style="margin-top: 0;">
           <div class="control-group">
             <label class="control-label">Feature Method</label>
-            <select id="feat-method" onchange="ImageModePage.executeCurrentOperation()">
+            <select id="feat-method" onchange="ImageModePage.debouncedExecute()">
               <option value="canny" selected>Canny Multi-Stage Edge Detector</option>
               <option value="sobel">Sobel 1st-Order Derivative</option>
               <option value="laplacian">Laplacian 2nd-Order Operator</option>
@@ -147,15 +157,15 @@ const ImageModePage = {
           </div>
           <div class="control-group">
             <label class="control-label">Canny Low Threshold <span id="clow-val" class="control-value">50</span></label>
-            <input type="range" id="canny-low" min="10" max="250" step="5" value="50" oninput="document.getElementById('clow-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="canny-low" min="10" max="250" step="5" value="50" oninput="document.getElementById('clow-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Canny High Threshold <span id="chigh-val" class="control-value">150</span></label>
-            <input type="range" id="canny-high" min="20" max="300" step="5" value="150" oninput="document.getElementById('chigh-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="canny-high" min="20" max="300" step="5" value="150" oninput="document.getElementById('chigh-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Harris Sensitivity (k) <span id="hk-val" class="control-value">0.04</span></label>
-            <input type="range" id="harris-k" min="0.01" max="0.10" step="0.01" value="0.04" oninput="document.getElementById('hk-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="harris-k" min="0.01" max="0.10" step="0.01" value="0.04" oninput="document.getElementById('hk-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
         </div>
       `;
@@ -164,7 +174,7 @@ const ImageModePage = {
         <div class="controls-panel" style="margin-top: 0;">
           <div class="control-group">
             <label class="control-label">Segmentation Algorithm</label>
-            <select id="seg-method" onchange="ImageModePage.executeCurrentOperation()">
+            <select id="seg-method" onchange="ImageModePage.debouncedExecute()">
               <option value="kmeans" selected>K-Means Color Space Clustering</option>
               <option value="meanshift">Mean Shift Joint Mode-Seeking</option>
               <option value="region_growing">Seeded Region Growing</option>
@@ -173,11 +183,11 @@ const ImageModePage = {
           </div>
           <div class="control-group">
             <label class="control-label">Clusters (k) <span id="kclusters-val" class="control-value">4</span></label>
-            <input type="range" id="k-clusters" min="2" max="10" step="1" value="4" oninput="document.getElementById('kclusters-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="k-clusters" min="2" max="10" step="1" value="4" oninput="document.getElementById('kclusters-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">Region Growth Tolerance <span id="tol-val" class="control-value">20</span></label>
-            <input type="range" id="region-tol" min="5" max="60" step="5" value="20" oninput="document.getElementById('tol-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="region-tol" min="5" max="60" step="5" value="20" oninput="document.getElementById('tol-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
         </div>
       `;
@@ -190,14 +200,70 @@ const ImageModePage = {
           </div>
           <div class="control-group">
             <label class="control-label">Confidence Threshold <span id="conf-val" class="control-value">0.35</span></label>
-            <input type="range" id="yolo-conf" min="0.10" max="0.95" step="0.05" value="0.35" oninput="document.getElementById('conf-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="yolo-conf" min="0.10" max="0.95" step="0.05" value="0.35" oninput="document.getElementById('conf-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
           <div class="control-group">
             <label class="control-label">NMS IoU Threshold <span id="iou-val" class="control-value">0.45</span></label>
-            <input type="range" id="yolo-iou" min="0.10" max="0.90" step="0.05" value="0.45" oninput="document.getElementById('iou-val').innerText=this.value; ImageModePage.executeCurrentOperation()" />
+            <input type="range" id="yolo-iou" min="0.10" max="0.90" step="0.05" value="0.45" oninput="document.getElementById('iou-val').innerText=this.value; ImageModePage.debouncedExecute()" />
           </div>
         </div>
       `;
+    }
+  },
+
+  async loadSampleImage() {
+    try {
+      ProgressOverlay.show("Loading Sample Asset…", "Generating synthetic traffic image");
+      // Create sample image via HTML5 Canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = 1280;
+      canvas.height = 720;
+      const ctx = canvas.getContext("2d");
+
+      // Road background
+      ctx.fillStyle = "#1e2430";
+      ctx.fillRect(0, 0, 1280, 720);
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(0, 350, 1280, 370);
+
+      // Lane dividers
+      ctx.fillStyle = "#e2e8f0";
+      for (let x = 40; x < 1280; x += 160) {
+        ctx.fillRect(x, 520, 90, 15);
+      }
+
+      // Vehicles
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(220, 420, 220, 130);
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 24px Inter";
+      ctx.fillText("CAR", 300, 490);
+
+      ctx.fillStyle = "#16a34a";
+      ctx.fillRect(660, 370, 300, 200);
+      ctx.fillStyle = "#fff";
+      ctx.fillText("BUS", 780, 480);
+
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const file = new File([blob], "sample_traffic.jpg", { type: "image/jpeg" });
+        this._currentFile = file;
+        this._currentDataUrl = canvas.toDataURL("image/jpeg");
+
+        const origImg = document.getElementById("img-original");
+        const origPl = document.getElementById("orig-placeholder");
+        if (origImg && origPl) {
+          origImg.src = this._currentDataUrl;
+          origImg.style.display = "block";
+          origPl.style.display = "none";
+        }
+        ProgressOverlay.hide();
+        this.executeCurrentOperation();
+      }, "image/jpeg", 0.95);
+
+    } catch (e) {
+      ProgressOverlay.hide();
+      alert("Failed to create sample image: " + e.message);
     }
   },
 
@@ -208,10 +274,11 @@ const ImageModePage = {
 
     const reader = new FileReader();
     reader.onload = (event) => {
+      this._currentDataUrl = event.target.result;
       const origImg = document.getElementById("img-original");
       const origPl = document.getElementById("orig-placeholder");
       if (origImg && origPl) {
-        origImg.src = event.target.result;
+        origImg.src = this._currentDataUrl;
         origImg.style.display = "block";
         origPl.style.display = "none";
       }
@@ -220,12 +287,22 @@ const ImageModePage = {
     reader.readAsDataURL(file);
   },
 
-  async executeCurrentOperation() {
-    if (!this._currentFile) return;
+  debouncedExecute() {
+    clearTimeout(this._debounceTimer);
+    this._debounceTimer = setTimeout(() => {
+      this.executeCurrentOperation();
+    }, 180);
+  },
 
+  async executeCurrentOperation() {
+    if (!this._currentFile || this._isProcessing) return;
+
+    this._isProcessing = true;
     ProgressOverlay.show("Running Computer Vision Pipeline…", `Executing ${this._activeTab} algorithm`);
+    
+    // Ensure clean Blob/File payload
     const formData = new FormData();
-    formData.append("file", this._currentFile);
+    formData.append("file", this._currentFile, this._currentFile.name || "image.jpg");
 
     try {
       let res;
@@ -282,7 +359,7 @@ const ImageModePage = {
             Dashboard.renderCategoryDonut("img-histogram-chart", res.category_counts);
           }
 
-          let metricsHtml = `<div><strong>Execution Time:</strong> ${res.execution_time_ms} ms</div>`;
+          let metricsHtml = `<div><strong>Execution Latency:</strong> <span class="badge badge-cyan">${res.execution_time_ms} ms</span></div>`;
           if (res.total_objects !== undefined) {
             metricsHtml += `<div><strong>Total Detected Objects:</strong> <span class="badge badge-emerald">${res.total_objects}</span></div>`;
           }
@@ -297,6 +374,7 @@ const ImageModePage = {
     } catch (err) {
       alert(`Processing error: ${err.message}`);
     } finally {
+      this._isProcessing = false;
       ProgressOverlay.hide();
     }
   }

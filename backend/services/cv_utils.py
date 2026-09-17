@@ -2,9 +2,11 @@
 cv_utils.py — Shared OpenCV and image processing helper utilities for the Smart Traffic Analytics platform.
 """
 import base64
+import io
 from typing import Optional, Tuple
 import cv2
 import numpy as np
+from PIL import Image
 
 
 def encode_image_to_base64(img: np.ndarray, quality: int = 92) -> str:
@@ -24,12 +26,31 @@ def encode_image_to_base64(img: np.ndarray, quality: int = 92) -> str:
 def decode_upload(file_bytes: bytes) -> Optional[np.ndarray]:
     """
     Decode raw multipart uploaded bytes into an OpenCV BGR numpy array.
+    Uses cv2.imdecode with robust PIL fallback for all image formats (PNG/Alpha, WebP, AVIF, TIFF, etc.).
     """
-    if not file_bytes:
+    if not file_bytes or len(file_bytes) == 0:
         return None
-    nparr = np.frombuffer(file_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    return img
+
+    # First attempt: OpenCV native buffer decode
+    try:
+        nparr = np.frombuffer(file_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if img is not None and img.size > 0:
+            return img
+    except Exception:
+        pass
+
+    # Fallback attempt: Pillow (handles RGBA, WebP, TIFF, Animated GIF 1st frame, etc.)
+    try:
+        pil_img = Image.open(io.BytesIO(file_bytes))
+        if pil_img.mode != "RGB":
+            pil_img = pil_img.convert("RGB")
+        rgb_arr = np.array(pil_img)
+        bgr_arr = cv2.cvtColor(rgb_arr, cv2.COLOR_RGB2BGR)
+        return bgr_arr
+    except Exception as e:
+        print(f"[decode_upload] Error decoding image buffer: {e}")
+        return None
 
 
 def resize_for_display(img: np.ndarray, max_dim: int = 960) -> np.ndarray:
@@ -126,7 +147,7 @@ def draw_text_with_bg(
     cv2.rectangle(
         img,
         (x - 2, y - th - baseline - 2),
-        (x + tw + 2, y + baseline),
+        (x + tw + 4, y + baseline),
         bg_color,
         -1,
     )
